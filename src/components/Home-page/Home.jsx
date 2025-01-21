@@ -177,9 +177,6 @@ const Home = ({ cart }) => {
           <Link to="/seller" className="block hover:text-blue-500">
             Become a Seller
           </Link>
-          <Link to="/Dashboard" className="block hover:text-blue-500">
-            Portfolio
-          </Link>
           <Link to="/AboutUs" className="block hover:text-blue-500">
             About Us
           </Link>
