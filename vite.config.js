@@ -7,22 +7,20 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core React libraries
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          
-          // PDF-related libraries
-          'pdf': ['jspdf', 'jspdf-autotable', 'pdf-lib'],
-          
-          // Carousel and slider libraries
           'carousel': ['react-slick', 'slick-carousel', 'swiper'],
-          
-          // Charts and icons
           'visualization': ['recharts', 'lucide-react', 'react-icons'],
-          
-          // UI utilities
-          'ui': ['react-toastify', 'core-js']
+          'ui': ['react-toastify']
         }
       }
+    },
+    commonjsOptions: {
+      // Add this to handle CommonJS modules better
+      transformMixedEsModules: true
+    },
+    // Exclude problematic dependencies from optimization
+    optimizeDeps: {
+      exclude: ['jspdf', 'jspdf-autotable', 'pdf-lib']
     },
     chunkSizeWarningLimit: 1000,
   }
