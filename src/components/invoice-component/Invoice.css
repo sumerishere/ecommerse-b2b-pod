@@ -1,0 +1,7 @@
+.input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors;
+  }
+  
+  .invoice-root {
+    @apply min-h-screen bg-gray-50 py-8;
+  }
