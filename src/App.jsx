@@ -21,6 +21,8 @@ import ChatbotContainer from "./components/Chat-bot/ChatBot";
 import NotFound from "./components/Error-page/NotFound";
 import Invoice from "./components/invoice-component/Invoice";
 import BulkOrder from "./components/Bulk-order/BulkOrder";
+import FeedPage from "./components/feed-page/FeedPage";
+import RegistrationForm from "./components/Registration-form/RegistrationForm";
 
 const ChatbotWrapper = () => {
   const location = useLocation();
@@ -77,6 +79,10 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/Invoice" element={<Invoice/>} />
         <Route path="/Bulk-Order" element={<BulkOrder/>}/>
+
+        <Route path="/feedpage" element={<FeedPage/>}/>
+
+        <Route path = "/registration-form" element={<RegistrationForm/>}/>
 
         <Route
           path="/electronicItems"
