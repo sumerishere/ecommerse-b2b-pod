@@ -10,7 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/Home-page/Home";
 import LoginForm from "./components/Login-form/LoginForm";
-import Registration from "./components/Resistration-form/Registration";
+import Registration from "./components/Resistration/Registration";
 import Dashboard from "./components/Dashboard/Dashboard";
 import AboutUs from "./components/About-us/AboutUs";
 import SellerDashboard from "./components/Seller/SellerDashboard";
