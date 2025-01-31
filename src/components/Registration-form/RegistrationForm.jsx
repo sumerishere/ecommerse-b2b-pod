@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronRight, Check } from "lucide-react";
+import { ChevronRight, Check, ArrowLeft } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,7 +37,7 @@ const RegistrationForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
 
   // State for user type
-  const [userType, setUserType] = useState("candidate");
+  const [userType, setUserType] = useState("director");
 
   // Define steps for the breadcrumb
   const steps = [
@@ -76,6 +76,8 @@ const RegistrationForm = () => {
     }));
   };
 
+  
+
   // Handle form submission for each step
   const handleContinue = async (e) => {
     e.preventDefault();
@@ -110,14 +112,23 @@ const RegistrationForm = () => {
     console.log("form", formData);
   };
 
+  const handleStep = () => {
+    if(currentStep > 1){
+      setCurrentStep(currentStep-1);
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <ToastContainer />
       {/* Header with progress indicator */}
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
+      <div className="flex gap-4 bg-gray-100 p-3 rounded-xl mb-6 border">
+        <div className="cursor-pointer" >
+          <button className="mt-1 h-[20px]" onClick={handleStep}><ArrowLeft /></button>
+        </div>
         <div className="flex items-center gap-2">
-          <span>Account verification</span>
-          <span className="text-indigo-600 text-sm">In progress</span>
+          <span className="">Account verification</span>
+          <div className="bg-indigo-200 rounded-2xl"><span className="text-indigo-700 text-sm px-2">In-progress</span></div>
         </div>
       </div>
 
@@ -125,7 +136,7 @@ const RegistrationForm = () => {
       <div className="flex justify-end gap-4 mb-8">
         <button
           onClick={() => setUserType("candidate")}
-          className={`px-6 py-2 rounded-md ${
+          className={`px-6 py-1 rounded-md ${
             userType === "candidate"
               ? "bg-indigo-600 text-white"
               : "bg-gray-100 text-gray-600"
@@ -135,7 +146,7 @@ const RegistrationForm = () => {
         </button>
         <button
           onClick={() => setUserType("director")}
-          className={`px-6 py-2 rounded-md ${
+          className={`px-6 py-1 rounded-md ${
             userType === "director"
               ? "bg-indigo-600 text-white"
               : "bg-gray-100 text-gray-600"
@@ -148,7 +159,6 @@ const RegistrationForm = () => {
       {/* Updated Steps sidebar with exact styling */}
       <div className="flex gap-8">
         <div className="w-48 relative">
-      
           {/* This is the modified section */}
           <div className="">
             {/* Container for the vertical line of IDs */}
@@ -169,13 +179,15 @@ const RegistrationForm = () => {
                     {/* Step indicator - positioned over the background strip */}
                     <div className="relative z-10 w-8 p-1">
                       {step.isCompleted ? (
-                        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mx-auto">
+                        <div className="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mx-auto">
                           <Check className="w-4 h-4 text-white" />
                         </div>
                       ) : (
                         <div
                           className={`w-6 h-6 rounded-full ${
-                            step.isActive ? "bg-indigo-600" : "bg-white text-black"
+                            step.isActive
+                              ? "bg-indigo-600"
+                              : "bg-white text-black"
                           } flex items-center justify-center text-white text-sm mx-auto`}
                         >
                           {step.id}
@@ -218,7 +230,7 @@ const RegistrationForm = () => {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     placeholder="First name"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
 
@@ -232,7 +244,7 @@ const RegistrationForm = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Your email"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
 
@@ -246,7 +258,7 @@ const RegistrationForm = () => {
                     value={formData.position}
                     onChange={handleInputChange}
                     placeholder="Position"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
 
@@ -260,7 +272,7 @@ const RegistrationForm = () => {
                     value={formData.addressLine1}
                     onChange={handleInputChange}
                     placeholder="Address line 1"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                   <input
                     type="text"
@@ -268,7 +280,7 @@ const RegistrationForm = () => {
                     value={formData.addressLine2}
                     onChange={handleInputChange}
                     placeholder="Address line 2"
-                    className="mt-2 w-full p-2 border rounded-md"
+                    className="mt-2 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
 
@@ -280,7 +292,7 @@ const RegistrationForm = () => {
                       value={formData.city}
                       onChange={handleInputChange}
                       placeholder="City"
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     />
                   </div>
                   <div>
@@ -290,7 +302,7 @@ const RegistrationForm = () => {
                       value={formData.zip}
                       onChange={handleInputChange}
                       placeholder="Zip"
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     />
                   </div>
                 </div>
@@ -304,7 +316,7 @@ const RegistrationForm = () => {
                       name="countryCode"
                       value={formData.countryCode}
                       onChange={handleInputChange}
-                      className="w-24 p-2 border rounded-md"
+                      className="w-24 p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     >
                       <option value="+91">+91</option>
                       {/* Add more country codes as needed */}
@@ -315,7 +327,7 @@ const RegistrationForm = () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="8974947492"
-                      className="flex-1 p-2 border rounded-md"
+                      className="flex-1 p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     />
                   </div>
                 </div>
@@ -334,7 +346,7 @@ const RegistrationForm = () => {
                     value={formData.shopActNumber}
                     onChange={handleInputChange}
                     placeholder="Number"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
 
@@ -346,7 +358,7 @@ const RegistrationForm = () => {
                     name="industry"
                     value={formData.industry}
                     onChange={handleInputChange}
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   >
                     <option value="">Please select your industry...</option>
                     <option value="IT Industry">IT Industry</option>
@@ -367,7 +379,7 @@ const RegistrationForm = () => {
                     value={formData.website}
                     onChange={handleInputChange}
                     placeholder="www.example.com"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
               </div>
@@ -384,7 +396,7 @@ const RegistrationForm = () => {
                     name="industry"
                     value={formData.currency}
                     onChange={handleInputChange}
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   >
                     <option value="">Please select your currency...</option>
                     <option value="IT Industry">IND</option>
@@ -402,7 +414,7 @@ const RegistrationForm = () => {
                     name="industry"
                     value={formData.value}
                     onChange={handleInputChange}
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   >
                     <option value="">Please select your bank...</option>
                     <option value="HDFC">HDFC</option>
@@ -422,7 +434,7 @@ const RegistrationForm = () => {
                     value={formData.bankAccNumber}
                     onChange={handleInputChange}
                     placeholder="Enter account number"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
 
@@ -436,7 +448,7 @@ const RegistrationForm = () => {
                     value={formData.bankIFSC}
                     onChange={handleInputChange}
                     placeholder="Enter your IFSC number"
-                    className="mt-1 w-full p-2 border rounded-md"
+                    className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
                 </div>
               </div>
@@ -454,7 +466,7 @@ const RegistrationForm = () => {
                   value={formData.adharOTP}
                   onChange={handleInputChange}
                   placeholder="Enter your otp number"
-                  className="mt-1 w-full p-2 border rounded-md"
+                  className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                 />
 
                 {/* <label className="block text-sm font-medium text-gray-700">Bank IFSC code</label> */}
@@ -464,14 +476,14 @@ const RegistrationForm = () => {
                   value={formData.digiLockerID}
                   onChange={handleInputChange}
                   placeholder="Enter DigiLocker ID"
-                  className="mt-2 w-full p-2 border rounded-md"
+                  className="mt-2 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                 />
               </div>
             )}
 
             <button
               type="submit"
-              className="mt-6 w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 flex items-center justify-center gap-2"
+              className="mt-6 w-full bg-indigo-600 text-white py-1 px-4 rounded-md hover:bg-indigo-700 flex items-center justify-center gap-2"
             >
               {currentStep === 4 ? "Final submit" : "continue"}
               <ChevronRight className="w-4 h-4" />
