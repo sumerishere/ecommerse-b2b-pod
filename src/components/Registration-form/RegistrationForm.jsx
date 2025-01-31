@@ -1,88 +1,118 @@
-import React, { useState } from 'react';
-import { ChevronRight, Check } from 'lucide-react';
+import React, { useState } from "react";
+import { ChevronRight, Check } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegistrationForm = () => {
-  // State for form data
   const [formData, setFormData] = useState({
-    // Basic Information
-    firstName: '',
-    email: '',
-    position: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    zip: '',
-    phone: '',
-    countryCode: '+91',
-    
-    // Professional Details
-    shopActNumber: '',
-    industry: '',
-    website: '',
+    // 1.Basic Information
+    firstName: "",
+    email: "",
+    position: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    zip: "",
+    phone: "",
+    countryCode: "+91",
+
+    // 2.Professional Details
+    shopActNumber: "",
+    industry: "",
+    website: "",
+
+    // 3.bank details(optional)
+    currency: "",
+    bankName: "",
+    organizationWebsite: "",
+    bankAccNumber: "",
+    bankIFSC: "",
+
+    // 4.OTP verification
+    adharOTP: "",
+    digiLockerID: "",
   });
 
   // State for current step
   const [currentStep, setCurrentStep] = useState(1);
-  
+
   // State for user type
-  const [userType, setUserType] = useState('candidate');
+  const [userType, setUserType] = useState("candidate");
 
   // Define steps for the breadcrumb
   const steps = [
     {
       id: 1,
-      title: 'Basic Details',
+      title: "Basic Details",
       isCompleted: currentStep > 1,
       isActive: currentStep === 1,
     },
     {
       id: 2,
-      title: 'Professional details',
+      title: "Professional details",
       isCompleted: currentStep > 2,
       isActive: currentStep === 2,
     },
     {
       id: 3,
-      title: 'OTP Verification',
+      title: "Bank Details(Optional)",
       isCompleted: currentStep > 3,
       isActive: currentStep === 3,
+    },
+    {
+      id: 4,
+      title: "OTP Verification",
+      isCompleted: currentStep > 4,
+      isActive: currentStep === 4,
     },
   ];
 
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   // Handle form submission for each step
   const handleContinue = async (e) => {
     e.preventDefault();
-    
+
     try {
       if (currentStep === 1) {
         // Basic Details API call would go here
         // await fetch('your-api/basic-details', {...})
         setCurrentStep(2);
+        toast.success("Basic details done successful!");
       } else if (currentStep === 2) {
         // Professional Details API call would go here
         // await fetch('your-api/professional-details', {...})
         setCurrentStep(3);
+        toast.success("Professional details done successful!");
       } else if (currentStep === 3) {
         // Final submission
         // await fetch('your-api/complete-registration', {...})
+        setCurrentStep(4);
+        toast.success("Bank details done successful!");
+      } else if (currentStep === 4) {
+        // await fetch('your-api/complete-registration', {...})
         // Handle successful registration
+        // setCurrentStep(5);
+        // alert("submit successfully")
+        toast.success("Registration done successfully!");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      toast.err("Error submitting form:!");
+      console.error("Error submitting form:", error);
     }
+    console.log("form", formData);
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
+      <ToastContainer />
       {/* Header with progress indicator */}
       <div className="bg-gray-50 p-4 rounded-lg mb-6">
         <div className="flex items-center gap-2">
@@ -94,21 +124,21 @@ const RegistrationForm = () => {
       {/* User type selector */}
       <div className="flex justify-end gap-4 mb-8">
         <button
-          onClick={() => setUserType('candidate')}
+          onClick={() => setUserType("candidate")}
           className={`px-6 py-2 rounded-md ${
-            userType === 'candidate' 
-              ? 'bg-indigo-600 text-white' 
-              : 'bg-gray-100 text-gray-600'
+            userType === "candidate"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 text-gray-600"
           }`}
         >
           Candidate
         </button>
         <button
-          onClick={() => setUserType('director')}
+          onClick={() => setUserType("director")}
           className={`px-6 py-2 rounded-md ${
-            userType === 'director' 
-              ? 'bg-indigo-600 text-white' 
-              : 'bg-gray-100 text-gray-600'
+            userType === "director"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 text-gray-600"
           }`}
         >
           Director
@@ -118,43 +148,59 @@ const RegistrationForm = () => {
       {/* Updated Steps sidebar with exact styling */}
       <div className="flex gap-8">
         <div className="w-48 relative">
-          {/* Vertical line */}
-          <div className="absolute left-3 top-4 bottom-4 w-[2px] bg-gray-200"></div>
-          
-          {steps.map((step, index) => (
-            <div key={step.id} className="relative">
-              <div className={`flex items-start gap-3 mb-4 ${
-                step.isActive ? 'text-indigo-600' : 'text-gray-500'
-              }`}>
-                {/* Step indicator */}
-                <div className="relative z-10">
-                  {step.isCompleted ? (
-                    <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                      <Check className="w-4 h-4 text-white" />
+      
+          {/* This is the modified section */}
+          <div className="">
+            {/* Container for the vertical line of IDs */}
+            <div className="relative">
+              {/* Background strip for IDs */}
+              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gray-200 rounded-2xl "></div>
+
+              {/* Vertical connecting line */}
+              {/* <div className="absolute left-[14px] top-4 bottom-4 w-[2px] bg-gray-400"></div> */}
+
+              {steps.map((step, index) => (
+                <div key={step.id} className="relative ">
+                  <div
+                    className={`flex items-start gap-3 mb-4 ${
+                      step.isActive ? "text-indigo-600" : "text-gray-500"
+                    }`}
+                  >
+                    {/* Step indicator - positioned over the background strip */}
+                    <div className="relative z-10 w-8 p-1">
+                      {step.isCompleted ? (
+                        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mx-auto">
+                          <Check className="w-4 h-4 text-white" />
+                        </div>
+                      ) : (
+                        <div
+                          className={`w-6 h-6 rounded-full ${
+                            step.isActive ? "bg-indigo-600" : "bg-white text-black"
+                          } flex items-center justify-center text-white text-sm mx-auto`}
+                        >
+                          {step.id}
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className={`w-6 h-6 rounded-full ${
-                      step.isActive ? 'bg-indigo-600' : 'bg-gray-200'
-                    } flex items-center justify-center text-white text-sm`}>
-                      {step.id}
+
+                    {/* Step content */}
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{step.title}</span>
+                      {step.subTitle && (
+                        <span
+                          className={`text-sm ${
+                            step.isActive ? "text-indigo-600" : "text-gray-400"
+                          }`}
+                        >
+                          {step.subTitle}
+                        </span>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
-                
-                {/* Step content */}
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">{step.title}</span>
-                  {step.subTitle && (
-                    <span className={`text-sm ${
-                      step.isActive ? 'text-indigo-600' : 'text-gray-400'
-                    }`}>
-                      {step.subTitle}
-                    </span>
-                  )}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Form content */}
@@ -163,7 +209,9 @@ const RegistrationForm = () => {
             {currentStep === 1 && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
                   <input
                     type="text"
                     name="firstName"
@@ -175,7 +223,9 @@ const RegistrationForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Professional Email</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Professional Email
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -187,7 +237,9 @@ const RegistrationForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Position</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Position
+                  </label>
                   <input
                     type="text"
                     name="position"
@@ -199,7 +251,9 @@ const RegistrationForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Address</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Address
+                  </label>
                   <input
                     type="text"
                     name="addressLine1"
@@ -242,7 +296,9 @@ const RegistrationForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Phone</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Phone
+                  </label>
                   <div className="flex gap-2">
                     <select
                       name="countryCode"
@@ -269,7 +325,9 @@ const RegistrationForm = () => {
             {currentStep === 2 && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Shop Act/DIN Number</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Shop Act/DIN Number
+                  </label>
                   <input
                     type="text"
                     name="shopActNumber"
@@ -281,7 +339,9 @@ const RegistrationForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Industry</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Industry
+                  </label>
                   <select
                     name="industry"
                     value={formData.industry}
@@ -289,12 +349,18 @@ const RegistrationForm = () => {
                     className="mt-1 w-full p-2 border rounded-md"
                   >
                     <option value="">Please select your industry...</option>
-                    {/* Add industry options */}
+                    <option value="IT Industry">IT Industry</option>
+                    <option value="Mechanical Industry">
+                      Mechanical Industry
+                    </option>
+                    <option value="Chemical Industry">Chemical Industry</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Organization website</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Organization website
+                  </label>
                   <input
                     type="url"
                     name="website"
@@ -307,9 +373,99 @@ const RegistrationForm = () => {
               </div>
             )}
 
+            {/* bank details */}
             {currentStep === 3 && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Currency
+                  </label>
+                  <select
+                    name="industry"
+                    value={formData.currency}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full p-2 border rounded-md"
+                  >
+                    <option value="">Please select your currency...</option>
+                    <option value="IT Industry">IND</option>
+                    <option value="Mechanical Industry">USD</option>
+                    <option value="Chemical Industry">EUR</option>
+                    {/* Add industry options */}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Bank Name
+                  </label>
+                  <select
+                    name="industry"
+                    value={formData.value}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full p-2 border rounded-md"
+                  >
+                    <option value="">Please select your bank...</option>
+                    <option value="HDFC">HDFC</option>
+                    <option value="SBI">SBI</option>
+                    <option value="HSBC">HSBC</option>
+                    {/* Add industry options */}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Bank Account Number
+                  </label>
+                  <input
+                    type="text"
+                    name="bankAccNumber"
+                    value={formData.bankAccNumber}
+                    onChange={handleInputChange}
+                    placeholder="Enter account number"
+                    className="mt-1 w-full p-2 border rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Bank IFSC code
+                  </label>
+                  <input
+                    type="text"
+                    name="bankIFSC"
+                    value={formData.bankIFSC}
+                    onChange={handleInputChange}
+                    placeholder="Enter your IFSC number"
+                    className="mt-1 w-full p-2 border rounded-md"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* final otp step */}
+            {currentStep === 4 && (
               <div>
-                {/* Add OTP verification UI here */}
+                <label className="block text-sm font-medium text-gray-700">
+                  Keep your account secure
+                </label>
+                <input
+                  type="text"
+                  name="adharOTP"
+                  value={formData.adharOTP}
+                  onChange={handleInputChange}
+                  placeholder="Enter your otp number"
+                  className="mt-1 w-full p-2 border rounded-md"
+                />
+
+                {/* <label className="block text-sm font-medium text-gray-700">Bank IFSC code</label> */}
+                <input
+                  type="text"
+                  name="digiLockerID"
+                  value={formData.digiLockerID}
+                  onChange={handleInputChange}
+                  placeholder="Enter DigiLocker ID"
+                  className="mt-2 w-full p-2 border rounded-md"
+                />
               </div>
             )}
 
@@ -317,7 +473,7 @@ const RegistrationForm = () => {
               type="submit"
               className="mt-6 w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 flex items-center justify-center gap-2"
             >
-              Continue
+              {currentStep === 4 ? "Final submit" : "continue"}
               <ChevronRight className="w-4 h-4" />
             </button>
           </form>

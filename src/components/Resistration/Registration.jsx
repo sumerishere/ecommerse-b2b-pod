@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Eye, EyeOff, Building2, Users, TrendingUp, Package, Truck, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
