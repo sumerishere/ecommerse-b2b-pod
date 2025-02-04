@@ -19,12 +19,11 @@ const RegistrationForm = () => {
     // 2.Professional Details
     shopActNumber: "",
     industry: "",
-    website: "",
+    organizationWebsite: "",
 
     // 3.bank details(optional)
     currency: "",
     bankName: "",
-    organizationWebsite: "",
     bankAccNumber: "",
     bankIFSC: "",
 
@@ -122,7 +121,7 @@ const RegistrationForm = () => {
     <div className="max-w-2xl mx-auto p-6">
       <ToastContainer />
       {/* Header with progress indicator */}
-      <div className="flex gap-4 bg-gray-100 p-3 rounded-xl mb-6 border">
+      <div className="flex gap-4 bg-gray-100 p-2 rounded-2xl mb-6 border">
         <div className="cursor-pointer" >
           <button className="mt-1 h-[20px]" onClick={handleStep}><ArrowLeft /></button>
         </div>
@@ -229,6 +228,7 @@ const RegistrationForm = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
+                    // required
                     placeholder="First name"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
@@ -243,6 +243,7 @@ const RegistrationForm = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    // required
                     placeholder="Your email"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
@@ -257,6 +258,7 @@ const RegistrationForm = () => {
                     name="position"
                     value={formData.position}
                     onChange={handleInputChange}
+                    // required
                     placeholder="Position"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
@@ -271,6 +273,7 @@ const RegistrationForm = () => {
                     name="addressLine1"
                     value={formData.addressLine1}
                     onChange={handleInputChange}
+                    // required
                     placeholder="Address line 1"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
@@ -291,6 +294,7 @@ const RegistrationForm = () => {
                       name="city"
                       value={formData.city}
                       onChange={handleInputChange}
+                      // required
                       placeholder="City"
                       className="w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     />
@@ -301,6 +305,7 @@ const RegistrationForm = () => {
                       name="zip"
                       value={formData.zip}
                       onChange={handleInputChange}
+                      // required
                       placeholder="Zip"
                       className="w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     />
@@ -326,6 +331,7 @@ const RegistrationForm = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
+                      // required
                       placeholder="8974947492"
                       className="flex-1 p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                     />
@@ -345,6 +351,7 @@ const RegistrationForm = () => {
                     name="shopActNumber"
                     value={formData.shopActNumber}
                     onChange={handleInputChange}
+                    // required
                     placeholder="Number"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
@@ -357,6 +364,7 @@ const RegistrationForm = () => {
                   <select
                     name="industry"
                     value={formData.industry}
+                    // required
                     onChange={handleInputChange}
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   >
@@ -375,9 +383,10 @@ const RegistrationForm = () => {
                   </label>
                   <input
                     type="url"
-                    name="website"
-                    value={formData.website}
+                    name="organizationWebsite"
+                    value={formData.organizationWebsite}
                     onChange={handleInputChange}
+                    // required
                     placeholder="www.example.com"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   />
@@ -393,9 +402,10 @@ const RegistrationForm = () => {
                     Currency
                   </label>
                   <select
-                    name="industry"
-                    value={formData.currency}
+                    name="currency"
+                    value={formData.value}
                     onChange={handleInputChange}
+                    // required
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   >
                     <option value="">Please select your currency...</option>
@@ -411,8 +421,9 @@ const RegistrationForm = () => {
                     Bank Name
                   </label>
                   <select
-                    name="industry"
+                    name="bankName"
                     value={formData.value}
+                    // required
                     onChange={handleInputChange}
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                   >
@@ -432,6 +443,7 @@ const RegistrationForm = () => {
                     type="text"
                     name="bankAccNumber"
                     value={formData.bankAccNumber}
+                    // required
                     onChange={handleInputChange}
                     placeholder="Enter account number"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
@@ -446,6 +458,7 @@ const RegistrationForm = () => {
                     type="text"
                     name="bankIFSC"
                     value={formData.bankIFSC}
+                    // required
                     onChange={handleInputChange}
                     placeholder="Enter your IFSC number"
                     className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
@@ -465,6 +478,7 @@ const RegistrationForm = () => {
                   name="adharOTP"
                   value={formData.adharOTP}
                   onChange={handleInputChange}
+                  // required
                   placeholder="Enter your otp number"
                   className="mt-1 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                 />
@@ -475,6 +489,7 @@ const RegistrationForm = () => {
                   name="digiLockerID"
                   value={formData.digiLockerID}
                   onChange={handleInputChange}
+                  // required
                   placeholder="Enter DigiLocker ID"
                   className="mt-2 w-full p-1 border outline-none focus:ring-1 focus:ring-indigo-400 rounded-md"
                 />
