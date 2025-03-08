@@ -127,7 +127,7 @@ const RegistrationForm = () => {
         </div>
         <div className="flex items-center gap-2">
           <span className="">Account verification</span>
-          <div className="bg-indigo-200 rounded-2xl"><span className="text-indigo-700 text-sm px-2">In-progress</span></div>
+          <div className="bg-blue-200 rounded-2xl"><span className="text-indigo-700 text-sm px-2">In-progress</span></div>
         </div>
       </div>
 
@@ -137,7 +137,7 @@ const RegistrationForm = () => {
           onClick={() => setUserType("candidate")}
           className={`px-6 py-1 rounded-md ${
             userType === "candidate"
-              ? "bg-indigo-600 text-white"
+              ? "bg-blue-600 text-white"
               : "bg-gray-100 text-gray-600"
           }`}
         >
@@ -147,7 +147,7 @@ const RegistrationForm = () => {
           onClick={() => setUserType("director")}
           className={`px-6 py-1 rounded-md ${
             userType === "director"
-              ? "bg-indigo-600 text-white"
+              ? "bg-blue-600 text-white"
               : "bg-gray-100 text-gray-600"
           }`}
         >
@@ -185,7 +185,7 @@ const RegistrationForm = () => {
                         <div
                           className={`w-6 h-6 rounded-full ${
                             step.isActive
-                              ? "bg-indigo-600"
+                              ? "bg-blue-600"
                               : "bg-white text-black"
                           } flex items-center justify-center text-white text-sm mx-auto`}
                         >
@@ -498,7 +498,7 @@ const RegistrationForm = () => {
 
             <button
               type="submit"
-              className="mt-6 w-full bg-indigo-600 text-white py-1 px-4 rounded-md hover:bg-indigo-700 flex items-center justify-center gap-2"
+              className="mt-6 w-full bg-blue-600 text-white py-1 px-4 rounded-md hover:bg-blue-700 flex items-center justify-center gap-2"
             >
               {currentStep === 4 ? "Final submit" : "continue"}
               <ChevronRight className="w-4 h-4" />

@@ -66,11 +66,9 @@ function App() {
         <Route
           path="/"
           element={
-           
               <Home onLogout={handleLogout} cart={cart} />
-            
-          }
-        />
+          }/>
+          
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path="/seller" element={<SellerDashboard />} />
