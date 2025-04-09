@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Material Icons */
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); */
+
+/* @media (max-width: 768px) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+} */
