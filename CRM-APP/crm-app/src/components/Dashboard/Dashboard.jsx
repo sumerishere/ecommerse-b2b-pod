@@ -1,5 +1,5 @@
 import StatsCards from '../StatsCards/StatsCards ';
-import Calendarr from '../Dashboard/Calendar';
+import CalendarComp from '../Dashboard/Calendar';
 // import UserActivity from '../Dashboard/UserActivity ';
 import TechnologyCharts from '../Dashboard/TechnologyCharts ';
 import LineChartComp from "../Dashboard/LineChart";
@@ -26,7 +26,7 @@ const Dashboard = () => {
       {/* Calendar and Charts Section */}
       <div className="flex flex-col lg:flex-row gap-6 mt-6">
         <div className="flex-1">
-          <Calendarr />
+          <CalendarComp />
         </div>
         <div className="flex-1">
           {/* <UserActivity /> */}
