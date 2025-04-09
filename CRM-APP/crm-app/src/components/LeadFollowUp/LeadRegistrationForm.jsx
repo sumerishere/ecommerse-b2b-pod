@@ -168,18 +168,20 @@ const LeadRegistrationForm = () => {
             mobile: "",
             address: "",
             email: "",
-            CourseType: "", // Reset the field correctly
+            CourseType: "", 
             source: "",
             referName: "",
-            qualification: "", // Reset qualification field
+            qualification: "", 
             category: "",
             followUpDate: "",
             assignTo: "",
           });
-        } else {
-          const errorText = await response.text();
-          toast.error("Failed to submit the form.", errorText);
-        }
+        } 
+        else {
+          const errorText = await response.json();
+          console.log("backend message",errorText);
+          toast.error(errorText?.message || "Failed to submit the form.");
+                }
       } catch (error) {
         toast.error("An error occurred. Please try again.");
       } finally {

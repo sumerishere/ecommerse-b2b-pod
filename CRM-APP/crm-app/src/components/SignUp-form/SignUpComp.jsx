@@ -90,36 +90,75 @@ const SignUpComp = ({ setIsAuthenticated }) => {
                 if (!formData.mobileNumber || formData.mobileNumber.length !== 10) {
                      currentErrors[field] = "Mobile number must be exactly 10 digits"; isFormValid = false;
                 } else { currentErrors[field] = ""; }
-            } else if (!validate(field, formData[field])) {
+            } 
+            else if (!validate(field, formData[field])) {
                 isFormValid = false;
                 currentErrors[field] = errors[field] || "This field is required";
             } else { currentErrors[field] = ""; }
         });
+
         setErrors(currentErrors);
 
-        if (!isFormValid) { toast.warn("Please fix the errors in the form.", { position: "top-center" }); return; }
+        if (!isFormValid) { 
+          toast.warn("Please fix the errors in the form.", 
+            { position: "top-center" }); 
+            return; 
+        }
 
         const formDataToSend = new FormData();
         formDataToSend.append( "user", new Blob([JSON.stringify(formData)], { type: "application/json" }));
         if (logoFile) { formDataToSend.append("logo", logoFile); }
 
         try {
-          const response = await fetch("http://localhost:8080/save-user-info", { method: "POST", body: formDataToSend });
+
+          const response = await fetch("http://localhost:8080/save-user-info", {
+             method: "POST", body: formDataToSend 
+            });
+
           const responseText = await response.text();
-          if (!response.ok) { toast.error(`Error: ${responseText || 'Unknown server error'}`, { position: "top-center" }); console.error("Server Error:", responseText); return; }
+
+          if (!response.ok) { 
+            toast.error(`Error: ${responseText || 'Unknown server error'}`, 
+            { position: "top-center" }); 
+            console.error("Server Error:", responseText); 
+            return; 
+          }
+
           if (responseText.toLowerCase().includes("success")) {
-              toast.success("Sign up successful! Redirecting to login...", { position: "top-center", autoClose: 2000 });
-              setFormData({ fullName: "", address: "", mobileNumber: "", email: "", organizationName:"", userName: "", password: "" });
+              toast.success("Sign up successful! Redirecting to login...", 
+                { position: "top-center", autoClose: 2000 });
+
+              setFormData({ 
+                fullName: "", 
+                address: "", 
+                mobileNumber: "", 
+                email: "", 
+                organizationName:"", 
+                userName: "", 
+                password: "" 
+              });
+
               setErrors({});
               setLogoFile(null);
               document.getElementById('logo-upload-id')?.form.reset();
-              setTimeout(() => { navigate('/'); }, 2000);
-          } else { toast.info(`Server response: ${responseText}`, { position: "top-center" }); }
-        } catch (error) { toast.error(`Error submitting form: ${error.message}`, { position: "top-center" }); console.error("Submission error:", error); }
+
+              setTimeout(() => { 
+                navigate('/'); }, 3000
+              );
+
+          } 
+          else { toast.info(`Server response: ${responseText}`, { position: "top-center" }); }
+        } 
+        catch (error) { 
+          toast.error(`Error submitting form: ${error.message}`,
+          { position: "top-center" });
+          console.error("Submission error:", error); 
+        }
     };
 
-    const goToLoginPage = () => { navigate("/"); };
-
+    const goToLoginPage = () => { 
+      navigate("/");
+    };
 
   // --- Helper function for input classes remains the same ---
   const getInputClasses = (fieldName) => {
@@ -230,7 +269,7 @@ const SignUpComp = ({ setIsAuthenticated }) => {
             </form>
         </div>
 
-      </div> {/* End Main Card Container */}
+      </div> 
     </div> 
   );
 };

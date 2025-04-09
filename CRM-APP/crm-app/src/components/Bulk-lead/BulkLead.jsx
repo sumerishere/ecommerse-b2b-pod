@@ -81,7 +81,7 @@ const BulkLeadComponent = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+      <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-6">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Bulk Lead Upload</h2>
         </div>

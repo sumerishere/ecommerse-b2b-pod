@@ -220,180 +220,189 @@ const ClientData = ({ templateId }) => {
   // };
 
   if (loading) {
-    return <div id="loading-id">Loading...</div>;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+        <div className="flex flex-col items-center">
+          {/* Spinner */}
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          {/* Loading text */}
+          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   const fieldsDataArray = data.map((item) => item.fields_Data);
   const columnHeaders =
     fieldsDataArray.length > 0 ? Object.keys(fieldsDataArray[0]) : [];
 
-    return (
-      <div className="p-6 bg-white rounded-lg shadow-sm">
-        <ToastContainer />
-        <p className="text-2xl font-bold text-purple-700 mb-4">Client-Table</p>
-    
-        {/* client search input div */}
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            placeholder="Search client here"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-            value={searchTerm}
-            onChange={handleSearchInputChange}
-          />
-          <button 
-            className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors" 
-            onClick={handleSearchButtonClick}
+  return (
+    <div className="p-6 rounded-lg shadow-sm">
+      <ToastContainer />
+      <p className="text-2xl font-bold text-purple-700 mb-4">Client-Table</p>
+
+      {/* client search input div */}
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search client here"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+          value={searchTerm}
+          onChange={handleSearchInputChange}
+        />
+        <button 
+          className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors" 
+          onClick={handleSearchButtonClick}
+        >
+          Search
+        </button>
+      </div>
+      <hr className="border-gray-200 mb-4" />
+
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <Link
+            to={"/TemplateCreated"}
+            className="no-underline text-black"
           >
-            Search
-          </button>
+            <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors">
+              Add Client
+            </button>
+          </Link>          
         </div>
-        <hr className="border-gray-200 mb-4" />
-    
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <Link
-              to={"/TemplateCreated"}
-              className="no-underline text-black"
-            >
-              <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors">
-                Add Client
-              </button>
-            </Link>          
-          </div>
-    
-          <button 
-            className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-colors" 
-            onClick={handleRefresh}
-          >
-            <RedoOutlined className="text-purple-600" />
-          </button>
-        </div>
-    
-        <div className="w-full overflow-x-auto">
-          <div className="min-w-full">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
-              <thead className="bg-purple-100">
-                <tr>
-                  {columnHeaders.map((header, index) => (
-                    <th key={index} className="px-4 py-2 text-left text-gray-700 font-semibold border-b">{header}</th>
-                  ))}
-                  <th className="px-4 py-2 text-left text-gray-700 font-semibold border-b sticky right-0 bg-purple-100">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.length > 0 ? (
-                  filteredData.map((item) => (
-                    <tr key={item.uid} className="hover:bg-gray-50">
-                      {columnHeaders.map((header, index) => (
-                        <td className="px-4 py-3 border-b text-gray-700" key={index}>
-                          {item.fields_Data[header] !== undefined
-                            ? item.fields_Data[header]
-                            : ""}
-                        </td>
-                      ))}
-                      <td className="px-3 py-5 border-b sticky right-0  flex gap-2">
-                        <button
-                          className="text-blue-500 hover:text-blue-700 p-1"
-                          onClick={() => handleUpdateClick(item.uid)}
-                        >
-                          <FormOutlined />
-                        </button>
-    
-                        <Link to="/InvoiceGen" className="no-underline">
-                          <button
-                            className="text-green-500 hover:text-green-700 p-1"
-                          >
-                            <SnippetsOutlined />
-                          </button>
-                        </Link>
-    
-                        <button
-                          className="text-red-500 hover:text-red-700 p-1"
-                          onClick={() => handleDeleteClick(item.uid)}
-                        >
-                          <DeleteOutlined />
-                        </button>
+
+        <button 
+          className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-colors" 
+          onClick={handleRefresh}
+        >
+          <RedoOutlined className="text-purple-600" />
+        </button>
+      </div>
+
+      <div className="w-full overflow-x-auto">
+        <div className="min-w-full">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <thead className="bg-purple-100">
+              <tr>
+                {columnHeaders.map((header, index) => (
+                  <th key={index} className="px-4 py-2 text-left text-gray-700 font-semibold border-b">{header}</th>
+                ))}
+                <th className="px-4 py-2 text-left text-gray-700 font-semibold border-b sticky right-0 bg-purple-100">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.length > 0 ? (
+                filteredData.map((item) => (
+                  <tr key={item.uid} className="hover:bg-gray-50">
+                    {columnHeaders.map((header, index) => (
+                      <td className="px-4 py-3 border-b text-gray-700" key={index}>
+                        {item.fields_Data[header] !== undefined
+                          ? item.fields_Data[header]
+                          : ""}
                       </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={columnHeaders.length + 3} className="px-4 py-8 text-center text-gray-500 text-lg">
-                      Client not found 😭
+                    ))}
+                    <td className="px-3 py-5 border-b sticky right-0  flex gap-2">
+                      <button
+                        className="text-blue-500 hover:text-blue-700 p-1"
+                        onClick={() => handleUpdateClick(item.uid)}
+                      >
+                        <FormOutlined />
+                      </button>
+
+                      <Link to="/InvoiceGen" className="no-underline">
+                        <button
+                          className="text-green-500 hover:text-green-700 p-1"
+                        >
+                          <SnippetsOutlined />
+                        </button>
+                      </Link>
+
+                      <button
+                        className="text-red-500 hover:text-red-700 p-1"
+                        onClick={() => handleDeleteClick(item.uid)}
+                      >
+                        <DeleteOutlined />
+                      </button>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={columnHeaders.length + 3} className="px-4 py-8 text-center text-gray-500 text-lg">
+                    Client not found 😭
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <p className="text-lg font-medium mb-4 text-center">
+              Are you sure you want to delete this entry? 🥺
+            </p>
+            <div className="flex justify-center gap-4">
+              <button 
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                onClick={confirmDelete}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
+                onClick={() => setShowConfirm(false)}
+              >
+                No
+              </button>
+            </div>
           </div>
         </div>
-    
-        {showConfirm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-              <p className="text-lg font-medium mb-4 text-center">
-                Are you sure you want to delete this entry? 🥺
-              </p>
-              <div className="flex justify-center gap-4">
+      )}
+
+      {updateFormVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <form onSubmit={handleUpdateSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {columnHeaders.map((header) =>
+                header !== "lead-status" && header !== "fees completed" ? (
+                  <div key={header} className="mb-3">
+                    <label htmlFor={header} className="block text-gray-700 font-medium mb-1">{header}</label>
+                    <input
+                      type="text"
+                      required={true}
+                      id={header}
+                      name={header}
+                      value={updateFormData.fieldsData[header] || ""}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                ) : null
+              )}
+              <div className="md:col-span-2 flex justify-end gap-3 mt-4">
                 <button 
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                  onClick={confirmDelete}
+                  type="submit" 
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded"
                 >
-                  Yes
+                  Update
                 </button>
                 <button
+                  type="button"
                   className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
-                  onClick={() => setShowConfirm(false)}
+                  onClick={() => setUpdateFormVisible(false)}
                 >
-                  No
+                  Cancel
                 </button>
               </div>
-            </div>
+            </form>
           </div>
-        )}
-    
-        {updateFormVisible && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <form onSubmit={handleUpdateSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {columnHeaders.map((header) =>
-                  header !== "lead-status" && header !== "fees completed" ? (
-                    <div key={header} className="mb-3">
-                      <label htmlFor={header} className="block text-gray-700 font-medium mb-1">{header}</label>
-                      <input
-                        type="text"
-                        required={true}
-                        id={header}
-                        name={header}
-                        value={updateFormData.fieldsData[header] || ""}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                  ) : null
-                )}
-                <div className="md:col-span-2 flex justify-end gap-3 mt-4">
-                  <button 
-                    type="submit" 
-                    className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded"
-                  >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
-                    onClick={() => setUpdateFormVisible(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 };
 
 ClientData.propTypes = {

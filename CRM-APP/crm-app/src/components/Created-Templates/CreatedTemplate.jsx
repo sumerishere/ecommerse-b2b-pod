@@ -144,7 +144,16 @@ const TemplateCreated = ({ username }) => {
   };
 
   if (loading) {
-    return <div id="template-loading-id">Loading...</div>;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+        <div className="flex flex-col items-center">
+          {/* Spinner */}
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          {/* Loading text */}
+          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   if (templateData.length === 0) {

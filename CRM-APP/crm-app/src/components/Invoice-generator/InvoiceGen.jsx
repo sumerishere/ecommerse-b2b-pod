@@ -214,53 +214,58 @@ const InvoiceGen = ({ templateId }) => {
   }, []);
 
   const generatePDF = () => {
-    const doc = new jsPDF();
-
+    // Create a new jsPDF instance with more specific settings
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+  
     // Add PNG Image from base64
     if (imgData) {
-      doc.addImage(imgData, "PNG", 150, 10, 40, 40); // Adjusted image position
+      doc.addImage(imgData, "PNG", 150, 10, 40, 40);
     } else {
       console.error("Image data is not available.");
     }
-
+  
     // Title with "PAID" Text
     doc.setFontSize(16);
     const title = "Invoice";
     const paidText = "PAID";
-
+  
     // Title positioning
     doc.setTextColor(0, 0, 0); // Black text
     doc.text(title, 20, 20);
-
+  
     // Add "PAID" text with green background
     const paidTextWidth = doc.getTextWidth(paidText);
-    const paidTextX = 20 + doc.getTextWidth(title) + 5; // Position "PAID" next to "Invoice"
+    const paidTextX = 20 + doc.getTextWidth(title) + 5;
     const titleY = 20;
-
-    doc.setFillColor(0, 128, 0); // Green background for "PAID"
-    doc.rect(paidTextX - 3, titleY - 4, paidTextWidth + 6, 10, "F"); // Background rectangle
-    doc.setTextColor(255, 255, 255); // White text color
+  
+    doc.setFillColor(0, 128, 0);
+    doc.rect(paidTextX - 3, titleY - 4, paidTextWidth + 6, 10, "F");
+    doc.setTextColor(255, 255, 255);
     doc.text(paidText, paidTextX, titleY + 3);
-
+  
     // Font sizes
     const headingFontSize = 12;
     const valueFontSize = 10;
-
+  
     // Helper function to wrap text within a given width
     const wrapText = (text, x, y, maxWidth) => {
       const lines = doc.splitTextToSize(text, maxWidth);
       lines.forEach((line, index) => {
-        doc.text(line, x, y + index * 5); // Adjust line spacing if needed
+        doc.text(line, x, y + index * 5);
       });
-      return lines.length * 5; // Return the total height used by the text
+      return lines.length * 5;
     };
-
+  
     // Billed By Section
     const billedByX = 15;
-    const billedByY = 50; // Adjusted to position below the title
+    const billedByY = 50;
     const width = 85;
-    const radius = 5; // Radius for rounded corners
-
+    const radius = 5;
+  
     // Calculate text height
     const billedByNameHeight = wrapText(
       invoiceDetails.billedByName,
@@ -274,10 +279,9 @@ const InvoiceGen = ({ templateId }) => {
       billedByY + 20 + billedByNameHeight,
       width - 10
     );
-
+  
     // Adjust height of the rectangle dynamically
-    const billedByHeight =
-      billedByY + 20 + billedByNameHeight + billedByAddressHeight;
+    const billedByHeight = billedByY + 20 + billedByNameHeight + billedByAddressHeight;
     drawRoundedRect(
       doc,
       billedByX,
@@ -286,8 +290,8 @@ const InvoiceGen = ({ templateId }) => {
       billedByHeight - billedByY,
       radius
     );
-
-    doc.setTextColor(0, 0, 0); // Black text
+  
+    doc.setTextColor(0, 0, 0);
     doc.setFontSize(headingFontSize);
     doc.text("Billed By:", billedByX + 5, billedByY + 10);
     doc.setFontSize(valueFontSize);
@@ -303,11 +307,11 @@ const InvoiceGen = ({ templateId }) => {
       billedByY + 20 + billedByNameHeight,
       width - 10
     );
-
+  
     // Billed To Section
     const billedToX = 110;
-    const billedToY = billedByY; // Start at the same vertical position as "Billed By"
-
+    const billedToY = billedByY;
+  
     // Calculate text height
     const billedToNameHeight = wrapText(
       invoiceDetails.billedToName,
@@ -321,10 +325,9 @@ const InvoiceGen = ({ templateId }) => {
       billedToY + 20 + billedToNameHeight,
       width - 10
     );
-
+  
     // Adjust height of the rectangle dynamically
-    const billedToHeight =
-      billedToY + 20 + billedToNameHeight + billedToAddressHeight;
+    const billedToHeight = billedToY + 20 + billedToNameHeight + billedToAddressHeight;
     drawRoundedRect(
       doc,
       billedToX,
@@ -333,8 +336,8 @@ const InvoiceGen = ({ templateId }) => {
       billedToHeight - billedToY,
       radius
     );
-
-    doc.setTextColor(0, 0, 0); // Black text
+  
+    doc.setTextColor(0, 0, 0);
     doc.setFontSize(headingFontSize);
     doc.text("Billed To:", billedToX + 5, billedToY + 10);
     doc.setFontSize(valueFontSize);
@@ -350,60 +353,83 @@ const InvoiceGen = ({ templateId }) => {
       billedToY + 20 + billedToNameHeight,
       width - 10
     );
-
-    // Table Headers and Rows
-    const tableStartY = Math.max(billedByHeight, billedToHeight) + 20; // Position below the taller section
-    doc.autoTable({
-      startY: tableStartY,
-      head: [["Item", "Quantity", "Rate", "Amount"]],
-      body: items.map((item) => [
-        item.name,
-        item.quantity,
-        item.rate,
-        item.amount,
-      ]),
-      theme: "grid",
-      headStyles: {
-        fillColor: [128, 0, 128], // Purple
-        textColor: [255, 255, 255], // White
-      },
-      styles: {
-        fillColor: [240, 240, 255], // Light grey-purple
-        textColor: [0, 0, 0], // Black
-      },
-      margin: { top: 10, right: 10, bottom: 10, left: 10 },
+  
+    // Define table start position
+    const tableStartY = Math.max(billedByHeight, billedToHeight) + 20;
+    
+    // Create items table manually instead of using autoTable
+    const itemsTableHeaders = ["Item", "Quantity", "Rate", "Amount"];
+    const itemsData = items.map(item => [item.name, item.quantity, item.rate, item.amount]);
+    
+    // Draw items table headers
+    doc.setFillColor(128, 0, 128); // Purple
+    doc.rect(15, tableStartY, 180, 10, "F");
+    doc.setTextColor(255, 255, 255); // White
+    
+    // Position headers
+    const headerWidth = 180 / itemsTableHeaders.length;
+    itemsTableHeaders.forEach((header, index) => {
+      doc.text(header, 15 + (index * headerWidth) + 5, tableStartY + 7);
     });
-
-    // Payments Section
-    const paymentsStartY = doc.autoTable.previous.finalY + 20; // Position below the table
+    
+    // Draw item rows
+    let currentY = tableStartY + 10;
+    itemsData.forEach((row, rowIndex) => {
+      // Add row background
+      doc.setFillColor(240, 240, 255); // Light grey-purple
+      doc.rect(15, currentY, 180, 10, "F");
+      
+      // Add row text
+      doc.setTextColor(0, 0, 0); // Black
+      row.forEach((cell, cellIndex) => {
+        doc.text(String(cell), 15 + (cellIndex * headerWidth) + 5, currentY + 7);
+      });
+      
+      currentY += 10;
+    });
+    
+    // Payments section
+    const paymentsStartY = currentY + 20;
     doc.text("Payments:", 16, paymentsStartY);
-    doc.autoTable({
-      startY: paymentsStartY + 10, // Start below the "Payments" label
-      head: [["Date", "Mode", "Amount"]],
-      body: payments.map((payment) => [
-        payment.date,
-        payment.mode,
-        payment.amount,
-      ]),
-      theme: "grid",
-      headStyles: {
-        fillColor: [128, 0, 128], // Purple
-        textColor: [255, 255, 255], // White
-      },
-      styles: {
-        fillColor: [240, 240, 255], // Light grey-purple
-        textColor: [0, 0, 0], // Black
-      },
-      margin: { top: 10, right: 10, bottom: 10, left: 10 },
+    
+    // Draw payments table
+    const paymentHeaders = ["Date", "Mode", "Amount"];
+    const paymentData = payments.map(payment => [payment.date, payment.mode, payment.amount]);
+    
+    // Draw payment table headers
+    doc.setFillColor(128, 0, 128); // Purple
+    doc.rect(15, paymentsStartY + 10, 180, 10, "F");
+    doc.setTextColor(255, 255, 255); // White
+    
+    // Position headers
+    const paymentHeaderWidth = 180 / paymentHeaders.length;
+    paymentHeaders.forEach((header, index) => {
+      doc.text(header, 15 + (index * paymentHeaderWidth) + 5, paymentsStartY + 17);
     });
-
+    
+    // Draw payment rows
+    let currentPaymentY = paymentsStartY + 20;
+    paymentData.forEach((row, rowIndex) => {
+      // Add row background
+      doc.setFillColor(240, 240, 255); // Light grey-purple
+      doc.rect(15, currentPaymentY, 180, 10, "F");
+      
+      // Add row text
+      doc.setTextColor(0, 0, 0); // Black
+      row.forEach((cell, cellIndex) => {
+        doc.text(String(cell), 15 + (cellIndex * paymentHeaderWidth) + 5, currentPaymentY + 7);
+      });
+      
+      currentPaymentY += 10;
+    });
+  
     // Terms & Conditions Section
     const termsX = 15;
-    const termsY = doc.autoTable.previous.finalY + 20; // Position below the payments section
-    const termsWidth = 180; // Same width as other sections
-
+    const termsY = currentPaymentY + 20;
+    const termsWidth = 180;
+  
     // Title and text positioning
-    const termsTitleHeight = 20; // Height of title
+    const termsTitleHeight = 20;
     const termsText = [
       "1. Fees paid is not transferrable and non-refundable.",
       "2. Placement charges are applicable upon receipt of offer letter.",
@@ -411,52 +437,43 @@ const InvoiceGen = ({ templateId }) => {
       "4. Batch transfer charges (Rs. 5000) shall be applicable in case you want to change your current batch.",
       "5. If fees are paid in instalment, then the first instalment shall be paid at the time of admission and the next instalment shall be paid within 25 days of admission.",
     ];
-    const termsTextHeight = termsText.reduce(
-      (height, line) =>
-        height +
-        wrapText(
-          line,
-          termsX + 5,
-          termsY + height + termsTitleHeight,
-          termsWidth - 10
-        ),
-      0
-    );
-
-    // Adjust height of the rectangle dynamically
-    drawRoundedRect(
-      doc,
-      termsX,
-      termsY,
-      termsWidth,
-      termsTitleHeight + termsTextHeight,
-      radius
-    );
-
-    doc.setTextColor(0, 0, 0); // Black text
+    
+    let currentTermsY = termsY + termsTitleHeight;
+    const termsTextHeight = termsText.reduce((height, line) => {
+      const lineHeight = wrapText(line, termsX + 5, currentTermsY, termsWidth - 10);
+      currentTermsY += lineHeight;
+      return height + lineHeight;
+    }, 0);
+  
+    // Draw the terms box
+    drawRoundedRect(doc, termsX, termsY, termsWidth, termsTitleHeight + termsTextHeight, radius);
+  
+    // Add terms title and text
+    doc.setTextColor(0, 0, 0);
     doc.setFontSize(headingFontSize);
-    doc.text("Terms & Conditions:", termsX + 5, termsY + 10); // Title above the rectangle
+    doc.text("Terms & Conditions:", termsX + 5, termsY + 10);
+    
+    // Reset for actual terms text rendering
     doc.setFontSize(valueFontSize);
-    termsText.forEach((line, index) => {
-      wrapText(line, termsX + 5, termsY + 16 + index * 6, termsWidth - 10); // Adjust spacing between lines
+    currentTermsY = termsY + termsTitleHeight;
+    termsText.forEach(line => {
+      wrapText(line, termsX + 5, currentTermsY, termsWidth - 10);
+      currentTermsY += 6; // Space between terms
     });
-
-    //generate pdf
-    // doc.save("invoice.pdf");
+  
     return doc;
   };
 
-  // Helper function to draw a rounded rectangle
-  const drawRoundedRect = (doc, x, y, width, height, radius) => {
-    doc.setFillColor(240, 240, 255); // Light grey-purple
+ // Helper function to draw a rounded rectangle
+const drawRoundedRect = (doc, x, y, width, height, radius) => {
+  doc.setFillColor(240, 240, 255); // Light grey-purple
+  doc.setDrawColor(0, 0, 0); // Border color (black)
+  doc.setLineWidth(0.5); // Border width
 
-    // Draw the rounded rectangle
-    doc.setDrawColor(0, 0, 0); // Border color (black)
-    doc.setLineWidth(0.5); // Border width
-
-    doc.roundedRect(x, y, width, height, radius, radius, "F"); // 'F' for fill
-    doc.roundedRect(x, y, width, height, radius, radius, "S"); // 'S' for stroke
-  };
+  // Draw rectangle with rounded corners
+  doc.roundedRect(x, y, width, height, radius, radius, "F"); // Fill
+  doc.roundedRect(x, y, width, height, radius, radius, "S"); // Stroke
+};
 
   // const [candidateName, setCandidateName] = useState("");
   const [candidateMobile, setCandidateMobile] = useState("");
@@ -640,11 +657,11 @@ const InvoiceGen = ({ templateId }) => {
                           {data.map((item, index) => (
                             <tr key={index}>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.uid}</td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.fieldsData["Full Name"]}</td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["Address"]}</td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["mobile number"]}</td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["Mail"]}</td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["fees compeletion"]}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.fieldsData["Full Name"] || "NA"}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["Address"] || "NA"}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["Mobile Number"|| "NA"]}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["Mail"] || "NA"}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.fieldsData["fees compeletion"] || "NA"}</td>
                               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <button
                                   className="text-purple-600 hover:text-purple-800"

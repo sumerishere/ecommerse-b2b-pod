@@ -1,6 +1,7 @@
 import './index.css'; 
 import {Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import { UserProvider, useUser } from './context/UserContext'; // Import the context
 import Sidebar from './components/Side-bar/SideBar';
 import Dashboard from './components/Dashboard/Dashboard';
 import LeadFollowUp from './components/LeadFollowUp/LeadFollowUp';
@@ -12,16 +13,21 @@ import TemplateCustom from "./components/template-fom/TemplateCustom";
 import LoginComponent from "./components/Login-form/LoginComp";
 import SignUpComp from "./components/SignUp-form/SignUpComp";
 import ErrorBoundary from "./ErrorBoundary";
-
-// import LeadActivity from "./components/LeadFollowUp/LeadActivity";
-// import LeadList from "./components/LeadFollowUp/LeadList";
-// import BusinessPanel from "./components/Business-Panel/BusinessPanel";
-// import DynamicForm from "./components/template-fom/TemplateComp";
 import TemplateCreated from "./components/Created-Templates/CreatedTemplate";
 import ClientDataTable from "./components/Client-data/ClientDataTable";
-// import CalenderComponent from "./components/calender-component/CalenderComponent";
 
+// Main App component wrapped with the UserProvider
 function App() {
+  return (
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
+  );
+}
+
+// App content component that uses the UserContext
+function AppContent() {
+  const { user, updateUser } = useUser(); // Access the user context
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
@@ -33,17 +39,6 @@ function App() {
     localStorage.getItem("organizationName") || ""
   );
   const [templateId, setTemplateId] = useState(null);
-  const [user, setUser] = useState({
-    id: null,
-    fullName: "",
-    address: "",
-    mobileNumber: "",
-    email: "",
-    organizationName: "",
-    userName: "",
-    formTemplates: [],
-    logo: null,
-  });
 
   const handleLogin = (username, password) => {
     fetch(
@@ -64,9 +59,11 @@ function App() {
         localStorage.setItem("username", username);
         localStorage.setItem("organizationName", data.organizationName);
         localStorage.setItem("isAuthenticated", "true");
-        setUser(data);
+        
+        // Use Context to update user data
+        updateUser(data);
 
-        console.log("app user data", user);
+        console.log("app user data", data);
         console.log("getting organizationName---->", data.organizationName);
         console.log("username ---->", username);
         localStorage.setItem("user", JSON.stringify(data));
@@ -77,13 +74,6 @@ function App() {
         alert("Login failed. Please check your credentials.");
       });
   };
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
 
   const fetchTemplateData = (username) => {
     fetch(`http://localhost:8080/get-template-username?userName=${username}`)
@@ -106,6 +96,19 @@ function App() {
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("username");
     localStorage.removeItem("organizationName");
+    
+    // Reset user data in context
+    updateUser({
+      id: null,
+      fullName: "",
+      address: "",
+      mobileNumber: "",
+      email: "",
+      organizationName: "",
+      userName: "",
+      formTemplates: [],
+      logo: null,
+    });
   };
 
   useEffect(() => {
@@ -134,17 +137,10 @@ function App() {
                 element={
                   <ErrorBoundary>
                     <Dashboard />
-                    {/* <LeadActivity /> */}
                     <LeadFollowUp />
                   </ErrorBoundary>
                 }
               />
-
-              {/* <Route path="/LeadList" element={<LeadList />} />
-              <Route
-                path="/DynamicForm"
-                element={<DynamicForm userName={username} />}
-              /> */}
 
               <Route 
                 path="/BulkLead" 
@@ -182,8 +178,6 @@ function App() {
                 path="/ClientDataTable"
                 element={<ClientDataTable templateId={templateId} />}
               />
-
-              {/* <Route path="/CalenderComponent" element={<CalenderComponent />} /> */}
             </Routes>
           </div>
         </div>

@@ -220,9 +220,39 @@ const TemplateCustom = ({ username, organizationName }) => {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
+      {/* Informative Header Section */}
+      <div className="mb-6 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold text-purple-700 mb-2">Custom Template Builder</h2>
+        <p className="text-gray-700 mb-4">Create your own custom form templates for your organization's needs.</p>
+        
+        <div className="bg-white rounded-md p-4 border-l-4 border-purple-500">
+          <h3 className="font-medium text-purple-700 mb-2">How It Works:</h3>
+          <ul className="space-y-2 text-gray-600">
+            <li className="flex items-start">
+              <span className="text-purple-500 font-bold mr-2">•</span>
+              <span>Define your form fields with custom labels and types</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-purple-500 font-bold mr-2">•</span>
+              <span>The first four fields are required system fields</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-purple-500 font-bold mr-2">•</span>
+              <span>Add dropdown options for selection fields</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-purple-500 font-bold mr-2">•</span>
+              <span><strong>Important:</strong> Once submitted, this template becomes permanent</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+        <h3 className="text-xl font-medium text-gray-800 mb-4 pb-2 border-b border-gray-200">Form Field Configuration</h3>
+        
         {fields.map((field) => (
-          <div key={field.id} className="mb-6 border border-gray-200 rounded-md p-4">
+          <div key={field.id} className="mb-6 border border-gray-200 rounded-md p-4 hover:border-purple-300 transition-colors">
             <div className="flex justify-between items-center mb-2">
               <input
                 type="text"
@@ -237,7 +267,7 @@ const TemplateCustom = ({ username, organizationName }) => {
                 <button
                   type="button"
                   onClick={() => removeField(field.id)}
-                  className="text-gray-500 hover:text-gray-700 p-1 rounded-full"
+                  className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
                 >
                   ✕
                 </button>
@@ -279,7 +309,7 @@ const TemplateCustom = ({ username, organizationName }) => {
                       <button
                         type="button"
                         onClick={() => removeDropdownOption(field.id, index)}
-                        className="ml-2 text-gray-500 hover:text-gray-700 p-1 rounded-full"
+                        className="ml-2 text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
                       >
                         ✕
                       </button>
@@ -295,6 +325,12 @@ const TemplateCustom = ({ username, organizationName }) => {
                 </div>
               )}
             </div>
+            
+            {field.id < 5 && (
+              <div className="mt-2 text-xs text-gray-500 italic">
+                System field - required
+              </div>
+            )}
           </div>
         ))}
   
@@ -319,8 +355,8 @@ const TemplateCustom = ({ username, organizationName }) => {
       {showAlert && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4">
-            <div>
-              <p className="text-gray-600 font-medium">Note: "once you submit, It will be consider as permanent template form."</p>
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+              <p className="text-yellow-700 font-medium">Important: Once you submit, this will become a permanent template form.</p>
             </div>
             <h3 className="text-xl font-bold text-center my-4">Confirm Submission</h3>
             <div className="flex flex-col space-y-2 mt-4">

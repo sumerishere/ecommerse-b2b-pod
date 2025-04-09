@@ -350,7 +350,7 @@ const LeadFollowUp = () => {
         </button>
       </div>
   
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto h-[500px]">
         <table className="min-w-full bg-white border border-gray-200">
           <thead className="bg-gray-100">
             <tr>
@@ -568,7 +568,7 @@ const LeadFollowUp = () => {
                   Cancel
                 </button>
                 <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition"
+                  className="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded transition"
                   type="submit"
                 >
                   Update

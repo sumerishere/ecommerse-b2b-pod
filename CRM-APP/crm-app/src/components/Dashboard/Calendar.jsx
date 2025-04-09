@@ -288,7 +288,7 @@ const CalendarComp = () => {
                 {filteredLeads.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-gray-200">
                         <tr>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mobile</th>
@@ -302,7 +302,7 @@ const CalendarComp = () => {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {filteredLeads.map((lead, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
+                          <tr key={index} className="hover:bg-gray-200">
                             <td className="px-3 py-4 whitespace-nowrap text-sm">{lead.name || "N/A"}</td>
                             <td className="px-3 py-4 whitespace-nowrap text-sm">{lead.mobileNumber}</td>
                             <td className="px-3 py-4 whitespace-nowrap text-sm">{lead.email || "N/A"}</td>
@@ -328,7 +328,7 @@ const CalendarComp = () => {
                                 View comments
                               </button>
                               <button 
-                                className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+                                className="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded text-xs"
                                 onClick={() => handleLeadClick(lead)}
                               >
                                 Update lead
@@ -383,8 +383,8 @@ const CalendarComp = () => {
         {/* Update Form Modal */}
         {showUpdateForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-              <div className="flex justify-between items-center p-4 border-b border-gray-200">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-lg h-[550px] overflow-y-auto">
+              <div className="flex justify-between items-center p-4 border-b border-gray-200 ">
                 <h2 className="text-xl font-bold">Update FollowUp</h2>
                 <button
                   onClick={handleCloseUpdateForm}
@@ -394,7 +394,7 @@ const CalendarComp = () => {
                 </button>
               </div>
               
-              <form onSubmit={handleFormSubmit} className="p-6">
+              <form onSubmit={handleFormSubmit} className="p-6 ">
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Name:
