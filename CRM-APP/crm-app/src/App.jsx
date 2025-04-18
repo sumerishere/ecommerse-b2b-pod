@@ -15,6 +15,7 @@ import SignUpComp from "./components/SignUp-form/SignUpComp";
 import ErrorBoundary from "./ErrorBoundary";
 import TemplateCreated from "./components/Created-Templates/CreatedTemplate";
 import ClientDataTable from "./components/Client-data/ClientDataTable";
+import OverviewPage from "./components/overview-page/OverviewPage";
 
 // Main App component wrapped with the UserProvider
 function App() {
@@ -27,17 +28,22 @@ function App() {
 
 // App content component that uses the UserContext
 function AppContent() {
+
   const { user, updateUser } = useUser(); // Access the user context
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
   );
+
   const [username, setUsername] = useState(
     localStorage.getItem("username") || ""
   );
+
   const [organizationName, setOrganizationName] = useState(
     localStorage.getItem("organizationName") || ""
   );
+
   const [templateId, setTemplateId] = useState(null);
 
   const handleLogin = (username, password) => {
@@ -119,75 +125,87 @@ function AppContent() {
 
   return (
     <>
-      {isAuthenticated ? (
-        <div className="flex h-screen bg-gray-50">
-          {/* Sidebar Component */}
-          <Sidebar 
-            isExpanded={isSidebarExpanded} 
-            setIsExpanded={setIsSidebarExpanded}
-            username={username}
-            setIsAuthenticated={handleLogout}
-          />
-          
-          {/* Main Content */}
-          <div className="flex-1 overflow-auto">
+      {/* About/Overview page route that's accessible regardless of authentication */}
+      <Routes>
+        <Route path="/about" element={<OverviewPage />} />
+        
+        {/* Protected and authentication routes */}
+        <Route path="*" element={
+          isAuthenticated ? (
+            <div className="flex h-screen bg-gray-50">
+              {/* Sidebar Component */}
+              <Sidebar 
+                isExpanded={isSidebarExpanded} 
+                setIsExpanded={setIsSidebarExpanded}
+                username={username}
+                setIsAuthenticated={handleLogout}
+              />
+              
+              {/* Main Content */}
+              <div className="flex-1 overflow-auto">
+                <Routes>
+                  <Route
+                    path='/'
+                    element={
+                      <ErrorBoundary>
+                        <Dashboard />
+                        <LeadFollowUp />
+                      </ErrorBoundary>
+                    }
+                  />
+
+                  <Route 
+                    path="/BulkLead" 
+                    element={<BulkLeadComponent />} 
+                  />
+
+                  <Route
+                    path="/LeadRegistrationForm"
+                    element={<LeadRegistrationForm />}
+                  />
+
+                  <Route
+                    path="/InvoiceGen"
+                    element={<InvoiceGen templateId={templateId} />}
+                  />
+
+                  <Route 
+                    path="/Subscription" 
+                    element={<SubscriptionPage />}
+                  />
+
+                  <Route
+                    path="/TemplateCreated"
+                    element={<TemplateCreated username={username} />}
+                  />
+
+                  <Route 
+                    path="/TemplateCustom" 
+                    element={
+                      <TemplateCustom username={username} organizationName={organizationName} />
+                    }
+                  />
+
+                  <Route
+                    path="/ClientDataTable"
+                    element={<ClientDataTable templateId={templateId} />}
+                  />
+                  
+                  {/* Redirect all other paths to dashboard for authenticated users */}
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </div>
+            </div>
+          ) : (
             <Routes>
-              <Route
-                path='/'
-                element={
-                  <ErrorBoundary>
-                    <Dashboard />
-                    <LeadFollowUp />
-                  </ErrorBoundary>
-                }
-              />
-
-              <Route 
-                path="/BulkLead" 
-                element={<BulkLeadComponent />} 
-              />
-
-              <Route
-                path="/LeadRegistrationForm"
-                element={<LeadRegistrationForm />}
-              />
-
-              <Route
-                path="/InvoiceGen"
-                element={<InvoiceGen templateId={templateId} />}
-              />
-
-              <Route 
-                path="/Subscription" 
-                element={<SubscriptionPage />}
-              />
-
-              <Route
-                path="/TemplateCreated"
-                element={<TemplateCreated username={username} />}
-              />
-
-              <Route 
-                path="/TemplateCustom" 
-                element={
-                  <TemplateCustom username={username} organizationName={organizationName} />
-                }
-              />
-
-              <Route
-                path="/ClientDataTable"
-                element={<ClientDataTable templateId={templateId} />}
-              />
+              <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
+              <Route path="/SignUpComp" element={<SignUpComp />} />
+              {/* Redirect all other paths to login for non-authenticated users */}
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-          </div>
-        </div>
-      ) : (
-        <Routes>
-          <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
-          <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/SignUpComp" element={<SignUpComp />} />
-        </Routes>
-      )}
+          )
+        } />
+      </Routes>
     </>
   );
 }

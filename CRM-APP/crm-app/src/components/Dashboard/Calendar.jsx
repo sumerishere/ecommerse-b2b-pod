@@ -367,7 +367,7 @@ const CalendarComp = () => {
                   historyData
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                     .map((item) => (
-                      <div key={item.id} className="mb-4 p-3 bg-gray-50 rounded-lg">
+                      <div key={item.id} className="mb-4 p-3 bg-gray-200 border-gray-500 shadow-sm rounded-lg">
                         <p className="mb-2">{item.comment}</p>
                         <span className="text-xs text-gray-500">
                           {new Date(item.createdAt).toLocaleString()}
