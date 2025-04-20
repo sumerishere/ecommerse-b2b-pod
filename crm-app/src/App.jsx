@@ -16,6 +16,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import TemplateCreated from "./components/Created-Templates/CreatedTemplate";
 import ClientDataTable from "./components/Client-data/ClientDataTable";
 import OverviewPage from "./components/overview-page/OverviewPage";
+import KanbanBoard from './components/Kanban-board/KanbanBoard';
 
 // Main App component wrapped with the UserProvider
 function App() {
@@ -131,7 +132,7 @@ function AppContent() {
         
         {/* Protected and authentication routes */}
         <Route path="*" element={
-          isAuthenticated ? (
+          !isAuthenticated ? (
             <div className="flex h-screen bg-gray-50">
               {/* Sidebar Component */}
               <Sidebar 
@@ -190,6 +191,7 @@ function AppContent() {
                     path="/ClientDataTable"
                     element={<ClientDataTable templateId={templateId} />}
                   />
+                  <Route path="/create-kanban" element={<KanbanBoard/>}/>
                   
                   {/* Redirect all other paths to dashboard for authenticated users */}
                   <Route path="*" element={<Navigate to="/" />} />

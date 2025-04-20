@@ -8,6 +8,7 @@ import {
   SolutionOutlined,
   UserAddOutlined,
   UsergroupAddOutlined,
+  CreditCardOutlined 
 } from "@ant-design/icons";
 import { BsPeople } from "react-icons/bs";
 
@@ -30,14 +31,15 @@ const Sidebar = ({ isExpanded, setIsExpanded, username, setIsAuthenticated }) =>
     { icon: <FileDoneOutlined />, label: "Invoice", path: "/InvoiceGen" },
     { icon: <SolutionOutlined />, label: "Subscription", path: "/Subscription" },
     { icon: <FormOutlined />, label: "Create Template", path: "/TemplateCustom" },
+    { icon: <CreditCardOutlined />, label: "Create kanban", path:"/create-kanban" },
     { icon: <LogoutOutlined />, label: "Log out", action: handleLogout }
   ];
 
   return (
-    <aside className={`bg-white transition-all duration-300 shadow-md ${isExpanded ? 'w-56' : 'w-16'} relative`}>
+    <aside className={`bg-white transition-all duration-300 shadow-md ${isExpanded ? 'w-56 overflow-y-scroll' : 'w-16'} relative`}>
       {/* Toggle button */}
       <button 
-        className="absolute -right-3 top-6 bg-white rounded-full p-1 shadow-md z-10"
+        className="absolute right-2 top-6 bg-white rounded-full  p-1 shadow-md z-20"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <span className="material-icons text-gray-600 text-sm">
@@ -86,7 +88,7 @@ const Sidebar = ({ isExpanded, setIsExpanded, username, setIsAuthenticated }) =>
       </nav>
 
       {isExpanded && (
-        <div className="absolute bottom-4 left-4 text-xs text-gray-500">
+        <div className="absolute pb-2 left-4 text-xs text-gray-500">
           <p className="m-0">Design and developed by</p>
           <p className="m-0 font-medium">Sumer Khan.</p>
         </div>

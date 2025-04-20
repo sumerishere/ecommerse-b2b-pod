@@ -1,0 +1,62 @@
+/* Custom scrollbar for better UI */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #c084fc;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9333ea;
+  }
+  
+  /* Smooth transitions */
+  .kanban-column-enter {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  
+  .kanban-column-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  .kanban-column-exit {
+    opacity: 1;
+  }
+  
+  .kanban-column-exit-active {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .card-hover:hover {
+    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  /* Drag and drop effects */
+  .dragging {
+    opacity: 0.6;
+    transform: rotate(2deg);
+  }
+  
+  .drop-target {
+    border: 2px dashed #9333ea;
+    background-color: rgba(147, 51, 234, 0.05);
+  }
